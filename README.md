@@ -25,7 +25,16 @@ Initializing Clipper:
 3) Invite Clipper to your server.
 4) At this point you can open servers.json and remove the entry for the Clipper server if you choose.
 5) Pass Clipper an existing channel ID using /set_clips <channel-id> to designate this channel as the clips channel.
- 
+
+Example format for servers.json:
+```  
+  "<your-server-id>": {
+        "name": "<server-name>",
+        "CLIPS_CHANNEL_ID": "<clips-channel-id>",
+        "RATE_LIMITER": "0"
+    }
+```
+
 Using Clipper:
 1) Use /clipperhelp for an overview of it's commands.
 2) To start the bot: python3 main.py
