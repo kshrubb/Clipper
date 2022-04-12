@@ -89,7 +89,7 @@ async def set_ratelimit(ctx, ratelimit):
         await ctx.respond(f"{ratelimit} messages per hour was set as the clip rate limit. ", delete_after=5)
 
 
-@bot.slash_command(guild_ids=IDS, description="/clip <link> <optional thread_name>")
+@bot.slash_command(guild_ids=IDS, description="/clip <link> <optional: thread_name>")
 async def clip(ctx, link: str, thread_name: str = None):
     CLIPS_CHANNEL_ID = server_settings[str(ctx.guild.id)]["CLIPS_CHANNEL_ID"]
     if CLIPS_CHANNEL_ID != "null":
@@ -130,7 +130,7 @@ async def clip(ctx, link: str, thread_name: str = None):
     else:
         await ctx.respond(f"<@{ctx.author.id}>The #clips channel ID needs to be set. ", delete_after=6)
 
-@bot.slash_command(guild_ids=IDS)
+@bot.slash_command(guild_ids=IDS, description="Information on how to use Clipper. ")
 async def clipperhelp(ctx):
     userEmbed = discord.Embed(title="Clipper User Help", color=0x03a5fc)
     accepted_sites = [i for i in realLinks if "https://www." not in i]
