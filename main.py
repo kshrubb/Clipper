@@ -11,6 +11,10 @@ json_file = open("servers.json")
 server_settings = json.load(json_file)
 json_file.close()
 
+if not os.path.exists(".env"):
+    with open(".env", 'w') as outfile:
+        json.dump('BOT_TOKEN=', outfile, indent=4)
+
 if len(server_settings) == 0:
     print("At least one server needs to be in servers.json for the bot to run. Consult the example on github. ")
     quit()
