@@ -1,9 +1,8 @@
-from random import random
-from dotenv import load_dotenv
 import discord
 import os.path
 import json
 import datetime
+from dotenv import load_dotenv
 
 if not os.path.exists("servers.json"):
     with open("servers.json", 'w') as outfile:
@@ -40,6 +39,7 @@ realLinks = ["https://gfycat.com/", "https://youtube.com/", "https://twitch.tv/"
              "https://www.imgur.com/", "https://www.streamable.com/", "https://www.youtu.be/",
              "https://www.clips.twitch.tv/", "https://www.twitter.com/", "https://www.fxtwitter.com/",
              "https://www.giant.gfycat.com/"]
+
 
 @bot.event
 async def on_guild_join(guild):
@@ -111,7 +111,7 @@ async def clip(ctx, link: str, thread_name: str = None):
                         pfp = ctx.author.avatar.url
                         playercard = discord.Embed(
                             title=f"{thread_name}",
-                            color=discord.Color.teal()
+                            color=discord.Color.blue()
                         )
                         playercard.set_author(name=ctx.author.name, icon_url=pfp)
                         playercard.set_thumbnail(url=pfp)
@@ -132,10 +132,10 @@ async def clip(ctx, link: str, thread_name: str = None):
 
 @bot.slash_command(guild_ids=IDS, description="Information on how to use Clipper. ")
 async def clipperhelp(ctx):
-    userEmbed = discord.Embed(title="Clipper User Help", color=discord.Color.teal())
+    userEmbed = discord.Embed(title="Clipper User Help", color=0x03a5fc)
     accepted_sites = [i for i in realLinks if "https://www." not in i]
     userEmbed.add_field(name="Accepted Sites", value=f"{accepted_sites}")
-    adminEmbed = discord.Embed(title="Clipper Admin Help", color=discord.Color.teal())
+    adminEmbed = discord.Embed(title="Clipper Admin Help", color=0x03a5fc)
     adminEmbed.add_field(name="/botmessage", value="Creates a bot message in #clips .")
     adminEmbed.add_field(name="/my_guild", value="Returns server json fields to only the invoker.")
     adminEmbed.add_field(name="/set_clips <clips-channel-id>", value="Sets the clips channel ID that the bot will use.")
