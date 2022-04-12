@@ -1,7 +1,7 @@
 {
-    "<server-id>": {
-        "name": "<server-name>",
-        "CLIPS_CHANNEL_ID": "<clips-channel-id>",
+    "963122870245019648": {
+        "name": "Clipper",
+        "CLIPS_CHANNEL_ID": "963122888746078298",
         "RATE_LIMITER": "0"
     }
 }
