@@ -1,4 +1,4 @@
-# Clipper
+# Clipper v1.1
 I format your clips and automatically create a discussion thread for you! Created by kshrubb#5938!
 
 Required Software: You will need Python 3.8 and Py-Cord 2.0.0b7.
