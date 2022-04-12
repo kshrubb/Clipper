@@ -16,7 +16,7 @@ if not os.path.exists(".env"):
         json.dump('BOT_TOKEN=', outfile, indent=4)
 
 if len(server_settings) == 0:
-    print("At least one server needs to be in servers.json for the bot to run. Consult the example on github. ")
+    print("At least one server needs to be in servers.json for the bot to run. ")
     quit()
 
 load_dotenv()
@@ -46,7 +46,8 @@ realLinks = ["https://gfycat.com/", "https://youtube.com/", "https://twitch.tv/"
 
 
 @bot.event
-async def on_guild_join(guild):
+async def on_guild_join(guild,IDS=IDS):
+    IDS.append(str(guild.id))
     json_file = open("servers.json")
     array = json.load(json_file)
     if str(guild.id) not in array:
@@ -96,26 +97,26 @@ async def set_ratelimit(ctx, ratelimit):
 @bot.slash_command(guild_ids=IDS, description="/clip <link> <optional: thread_name>")
 async def clip(ctx, link: str, thread_name: str = None):
     CLIPS_CHANNEL_ID = server_settings[str(ctx.guild.id)]["CLIPS_CHANNEL_ID"]
-    if CLIPS_CHANNEL_ID != "null":
+    if (CLIPS_CHANNEL_ID) != "null":
         rl = int(server_settings[str(ctx.guild.id)]["RATE_LIMITER"])
         hour_ago = datetime.datetime.now() - datetime.timedelta(hours=1)
         counter = 0
-        async for msg in ctx.channel.history(limit=100, after=hour_ago):
-            counter += 1
-        if (rl > 0) and (counter >= rl):
-            await ctx.respond(f"<@{ctx.author.id}> You are posting too many clips. Try again in about an hour. ", delete_after=8)
-        else:
-            submitter = ctx.author
-            if thread_name is None:
-                thread_name = f"Combo by {str(submitter.name).split('#')[0]}!"
-            if len(thread_name) < 50:
-                if str(ctx.channel.id) == CLIPS_CHANNEL_ID:
+        if str(ctx.channel.id) == CLIPS_CHANNEL_ID:
+            async for msg in ctx.channel.history(limit=100, after=hour_ago):
+                counter += 1
+            if (rl > 0) and (counter >= rl):
+                await ctx.respond(f"<@{ctx.author.id}> You are posting too many clips. Try again in about an hour. ", delete_after=8)
+            else:
+                submitter = ctx.author
+                if thread_name is None:
+                    thread_name = f"Combo by {str(submitter.name).split('#')[0]}!"
+                if len(thread_name) < 50:
                     if any(site in link for site in realLinks):
                         await ctx.respond("Posting! ", delete_after=0)
                         pfp = ctx.author.avatar.url
                         playercard = discord.Embed(
-                            title=f"{thread_name}",
-                            color=discord.Color.blue()
+                        title=f"{thread_name}",
+                        color=discord.Color.blue()
                         )
                         playercard.set_author(name=ctx.author.name, icon_url=pfp)
                         playercard.set_thumbnail(url=pfp)
@@ -127,10 +128,11 @@ async def clip(ctx, link: str, thread_name: str = None):
                         print("A new clip was submitted successfully.")
                     else:
                         await ctx.respond(f"<@{ctx.author.id}> Submission failed: Try /clipperhelp to see available sites.", delete_after=8)
+
                 else:
-                    await ctx.respond(f"<@{ctx.author.id}> You are submitting in the incorrect channel. ", delete_after=6)
-            else:
-                await ctx.respond(f"<@{ctx.author.id}> Try a shorter thread name. ", delete_after=6)
+                    await ctx.respond(f"<@{ctx.author.id}> Try a shorter thread name. ", delete_after=6)
+        else:
+            await ctx.respond(f"<@{ctx.author.id}> You are submitting in the incorrect channel. ", delete_after=6)
     else:
         await ctx.respond(f"<@{ctx.author.id}>The #clips channel ID needs to be set. ", delete_after=6)
 

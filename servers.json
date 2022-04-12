@@ -3,5 +3,15 @@
         "name": "kshrubb Development",
         "CLIPS_CHANNEL_ID": "962695429160599562",
         "RATE_LIMITER": "0"
+    },
+    "99093170385620992": {
+        "name": "SSBM Falco Discord",
+        "CLIPS_CHANNEL_ID": "402175578217906196",
+        "RATE_LIMITER": "0"
+    },
+    "943341812670689291": {
+        "name": "Boone BirdLabs",
+        "CLIPS_CHANNEL_ID": "962675809359912970",
+        "RATE_LIMITER": "0"
     }
 }
