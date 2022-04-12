@@ -128,7 +128,6 @@ async def clip(ctx, link: str, thread_name: str = None):
                         print("A new clip was submitted successfully.")
                     else:
                         await ctx.respond(f"<@{ctx.author.id}> Submission failed: Try /clipperhelp to see available sites.", delete_after=8)
-
                 else:
                     await ctx.respond(f"<@{ctx.author.id}> Try a shorter thread name. ", delete_after=6)
         else:
