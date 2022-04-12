@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 if not os.path.exists("servers.json"):
     with open("servers.json", 'w') as outfile:
-        json.dump("{\n\t\n}", outfile, indent=4)
+        json.dump('{\n\t"945032070458118194": {\n\t\t"name": "kshrubb Development",\n\t\t"CLIPS_CHANNEL_ID": "962695429160599562",\n\t\t"RATE_LIMITER": "0"\n\t}\n}', outfile, indent=4)
 json_file = open("servers.json")
 server_settings = json.load(json_file)
 json_file.close()
