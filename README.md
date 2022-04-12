@@ -22,21 +22,12 @@ Installation:
     py -3 -m pip install -U py-cord==2.0.0b7
     
 Initializing Clipper:
-1) Edit .env and modify BOT_TOKEN to reflect your bot's token.
-2) Execute main.py with python3.8.
-3) Invite Clipper to your server.
-4) At this point you can open servers.json and remove the entry for the Clipper server if you choose.
+1) Run with: python3.8 main.py
+2) Edit .env and modify BOT_TOKEN to reflect your bot's token.
+3) Run the bot again
+4) Invite Clipper to your server.
 5) Pass Clipper an existing channel ID using /set_clips <channel-id> to designate this channel as the clips channel.
 
-Example format for servers.json:
-```  
-  "<your-server-id>": {
-        "name": "<server-name>",
-        "CLIPS_CHANNEL_ID": "<clips-channel-id>",
-        "RATE_LIMITER": "0"
-    }
-```
-
 Using Clipper:
-1) Use /clipperhelp for an overview of it's commands.
-2) To start the bot: python3 main.py
+1) To start the bot: python3.8 main.py
+2) Use /clipperhelp for an overview of it's commands.
