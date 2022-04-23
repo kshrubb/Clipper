@@ -1,7 +1,7 @@
 # Clipper v1.1
 I format your clips and automatically create a discussion thread for you! Created by kshrubb#5938!
 
-Required Software: You will need Python 3.8, Python-DotEnv and Py-Cord 2.0.0b7.
+Required Software: You will need Python 3.8, Python-DotEnv, emojis and Py-Cord 2.0.0b7.
 
 Installation:
 
@@ -11,6 +11,7 @@ Installation:
     sudo apt update
     sudo apt install python3.8
 
+    python3.8 pip install emojis --upgrade
     python3.8 pip install python-dotenv
     python3.8 pip install py-cord==2.0.0b7
 
@@ -18,6 +19,7 @@ Installation:
 
     Install the latest Python 3.8.x from their website.
 
+    py -3 -m pip install emojis
     py -3 -m pip install python-dotenv
     py -3 -m pip install -U py-cord==2.0.0b7
     
