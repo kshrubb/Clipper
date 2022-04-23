@@ -48,6 +48,20 @@ realLinks = ["https://gfycat.com/", "https://youtube.com/", "https://twitch.tv/"
              "https://www.clips.twitch.tv/", "https://www.twitter.com/", "https://www.fxtwitter.com/",
              "https://www.giant.gfycat.com/"]
 
+def check_emojis(message):
+    pointers = []
+    for x in range(0, len(message)):
+        if message[x] == ":":
+            pointers.append(x)
+    while len(pointers) > 0:
+        if message[pointers[0]:(pointers[1] + 1)] in emojis.db.get_emoji_aliases():
+            pointers.pop(0)
+            pointers.pop(0)
+            pass
+        else:
+            return 1
+    return 0
+
 def write_settings(array):
     with open("servers.json", 'w') as outfile:
         json.dump(array, outfile, indent=4)
@@ -124,18 +138,10 @@ async def clip(ctx, link: str, thread_name: str = None):
     if thread_name is None:
         thread_name = f"Combo by {str(submitter.name).split('#')[0]}!"
     else:
-        pointers = []
-        for x in range(0, len(thread_name)):
-            if thread_name[x] == ":":
-                pointers.append(x)
-        while len(pointers) > 0:
-            if thread_name[pointers[0]:(pointers[1]+1)] in emojis.db.get_emoji_aliases():
-                pointers.pop(0)
-                pointers.pop(0)
-                pass
-            else:
-                await ctx.respond(f"<@{ctx.author.id}> I do not have access to non-default discord emojis. ", delete_after=6)
-                return
+        if check_emojis(thread_name) == 1:
+            await ctx.respond(f"<@{ctx.author.id}> I do not have access to non-default discord emojis. ",
+                              delete_after=6)
+            return
     # check that clips channel is set
     if CLIPS_CHANNEL_ID == "null":
         await ctx.respond(f"<@{ctx.author.id}> The #clips channel ID needs to be set. ", delete_after=6)
@@ -160,7 +166,7 @@ async def clip(ctx, link: str, thread_name: str = None):
         await ctx.respond(f"<@{ctx.author.id}> You are posting too many clips. Try again in about an hour. ", delete_after=8)
         return
     # construct playercard, post clip and add reaction
-    await ctx.respond("Posting! ", delete_after=0)
+    await ctx.respond(":ghost:", delete_after=0)
     pfp = ctx.author.avatar.url
     playercard = discord.Embed(
         title=f"{thread_name}",
@@ -196,7 +202,11 @@ async def clipperhelp(ctx):
 async def botmessage(ctx, message):
     # check if caller is administrator or kshrubb and send a Clipper message
     if (ctx.author.guild_permissions.administrator) or (ctx.author.id == 142116202808999936):
-        await ctx.respond("boo", delete_after=0)
+        if check_emojis(message) == 1:
+            await ctx.respond(f"<@{ctx.author.id}> I do not have access to non-default discord emojis. ",
+                              delete_after=6)
+            return
+        await ctx.respond(":ghost:", delete_after=0)
         await ctx.send(message)
 
 
