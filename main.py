@@ -6,10 +6,15 @@ import json
 import datetime
 import emojis
 
+# create .env if it doesnt exist
+if not os.path.exists(".env"):
+    with open(".env", 'w') as outfile:
+        json.dump('BOT_TOKEN=', outfile, indent=4)
+
 # load settings
 if not os.path.exists("servers.json"):
     with open("servers.json", 'w') as outfile:
-        json.dump("{\n\t\n}", outfile, indent=4)
+        json.dump('{\n\t"945032070458118194": {\n\t\t"name": "kshrubb Development",\n\t\t"CLIPS_CHANNEL_ID": "962695429160599562",\n\t\t"RATE_LIMITER": "0"\n\t}\n}', outfile, indent=4)
 json_file = open("servers.json")
 server_settings = json.load(json_file)
 json_file.close()
@@ -60,12 +65,12 @@ async def on_guild_join(guild):
     # when joining a new guild, this adds a template server entry to servers.json for the new guild
     # and appends the guild ID to the IDS list
     global IDS
-    IDS.append(guild.id)
+    IDS.append(str(guild.id))
     server_settings = read_settings()
     if str(guild.id) not in server_settings:
-        array[guild.id] = {"name": f"{guild.name}", "CLIPS_CHANNEL_ID": "null", "RATE_LIMITER": "0"}
+        server_settings[guild.id] = {"name": f"{guild.name}", "CLIPS_CHANNEL_ID": "null", "RATE_LIMITER": "0"}
         write_settings(server_settings)
-    print("servers.json was updated with a new server's information.")
+        print("servers.json was updated with a new server's information.")
 
 
 @bot.event
@@ -109,8 +114,13 @@ async def set_ratelimit(ctx, ratelimit):
 
 @bot.slash_command(guild_ids=IDS, description="/clip <link> <optional: thread_name>")
 async def clip(ctx, link: str, thread_name: str = None):
+    # first initialize variables and load needed values
     server_settings = read_settings()
     CLIPS_CHANNEL_ID = server_settings[str(ctx.guild.id)]["CLIPS_CHANNEL_ID"]
+    submitter = ctx.author
+    rl = int(server_settings[str(ctx.guild.id)]["RATE_LIMITER"])
+    counter = 0
+    hour_ago = datetime.datetime.now() - datetime.timedelta(hours=1)
     # check emojis in thread_name
     if thread_name is None:
         thread_name = f"Combo by {str(submitter.name).split('#')[0]}!"
@@ -143,16 +153,14 @@ async def clip(ctx, link: str, thread_name: str = None):
     if not any(site in link for site in realLinks):
         await ctx.respond(f"<@{ctx.author.id}> Submission failed: Try /clipperhelp to see available sites.",
                           delete_after=8)
+        return
     # check for ratelimit
-    rl = int(server_settings[str(ctx.guild.id)]["RATE_LIMITER"])
-    if (rl > 0) and (counter >= rl):
-        await ctx.respond(f"<@{ctx.author.id}> You are posting too many clips. Try again in about an hour. ", delete_after=8)
-    hour_ago = datetime.datetime.now() - datetime.timedelta(hours=1)
-    counter = 0
     async for msg in ctx.channel.history(limit=100, after=hour_ago):
         counter += 1
+    if (rl > 0) and (counter >= rl):
+        await ctx.respond(f"<@{ctx.author.id}> You are posting too many clips. Try again in about an hour. ", delete_after=8)
+        return
     # construct playercard, post clip and add reaction
-    submitter = ctx.author
     await ctx.respond("Posting! ", delete_after=0)
     pfp = ctx.author.avatar.url
     playercard = discord.Embed(
