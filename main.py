@@ -40,7 +40,6 @@ intents.guild_messages = True
 
 bot = discord.Bot(intents=intents)
 
-server_settings = None
 realLinks = ["https://gfycat.com/", "https://youtube.com/", "https://twitch.tv/",
              "https://imgur.com/", "https://streamable.com/", "https://youtu.be/",
              "https://clips.twitch.tv/", "https://twitter.com/", "https://fxtwitter.com/",
