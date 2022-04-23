@@ -11,6 +11,11 @@ if not os.path.exists(".env"):
     with open(".env", 'w') as outfile:
         json.dump('BOT_TOKEN=', outfile, indent=4)
 
+load_dotenv()
+if os.getenv('BOT_TOKEN') is None:
+    print("You need to add a BOT_TOKEN to .env! .env may be hidden in the directory since it's a system file. ")
+    quit()
+
 # load settings
 if not os.path.exists("servers.json"):
     with open("servers.json", 'w') as outfile:
@@ -23,10 +28,6 @@ if len(server_settings) == 0:
     print("At least one server needs to be in servers.json for the bot to run. Consult the example on github. ")
     quit()
 
-load_dotenv()
-if os.getenv('BOT_TOKEN') is None:
-    print("You need to add a BOT_TOKEN to .env! .env may be hidden in the directory since it's a system file. ")
-    quit()
 
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 IDS = [i for i in server_settings]
