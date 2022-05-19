@@ -47,7 +47,7 @@ realLinks = ["https://gfycat.com/", "https://youtube.com/", "https://twitch.tv/"
              "https://giant.gfycat.com/", "https://www.gfycat.com/", "https://www.youtube.com/", "https://www.twitch.tv/",
              "https://www.imgur.com/", "https://www.streamable.com/", "https://www.youtu.be/",
              "https://www.clips.twitch.tv/", "https://www.twitter.com/", "https://www.fxtwitter.com/",
-             "https://www.giant.gfycat.com/"]
+             "https://www.giant.gfycat.com/", "https://medal.tv/", "https://www.medal.tv/"]
 
 def check_emojis(message):
     pointers = []
@@ -132,7 +132,7 @@ async def clip(ctx, link: str, thread_name: str = None):
     server_settings = read_settings()
     CLIPS_CHANNEL_ID = server_settings[str(ctx.guild.id)]["CLIPS_CHANNEL_ID"]
     submitter = ctx.author
-    rl = int(server_settings[str(ctx.guild.id)]["RATE_LIMITER"])
+    ratelimit = int(server_settings[str(ctx.guild.id)]["RATE_LIMITER"])
     counter = 0
     hour_ago = datetime.datetime.now() - datetime.timedelta(hours=1)
     # check emojis in thread_name
@@ -163,18 +163,18 @@ async def clip(ctx, link: str, thread_name: str = None):
     # check for ratelimit
     async for msg in ctx.channel.history(limit=100, after=hour_ago):
         counter += 1
-    if (rl > 0) and (counter >= rl):
+    if (ratelimit > 0) and (counter >= ratelimit):
         await ctx.respond(f"<@{ctx.author.id}> You are posting too many clips. Try again in about an hour. ", delete_after=8)
         return
     # construct playercard, post clip and add reaction
     await ctx.respond(":ghost:", delete_after=0)
-    pfp = ctx.author.avatar.url
+    profile_picture = ctx.author.avatar.url
     playercard = discord.Embed(
         title=f"{thread_name}",
         color=discord.Color.teal()
     )
-    playercard.set_author(name=ctx.author.name, icon_url=pfp)
-    playercard.set_thumbnail(url=pfp)
+    playercard.set_author(name=ctx.author.name, icon_url=profile_picture)
+    playercard.set_thumbnail(url=profile_picture)
     await ctx.send(embed=playercard)
     pre_thread = await ctx.send(f"{link}")
     await pre_thread.add_reaction("🔥")
